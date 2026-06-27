@@ -1,0 +1,22 @@
+{
+  "name": "Dreamy.Audio.Tests.PlayMode",
+  "rootNamespace": "Dreamy.Audio.Tests",
+  "references": [
+    "Dreamy.Audio.Runtime",
+    "Dreamy.Audio.Runtime.Components"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Dreamy.Audio.Tests.EditMode",
+  "rootNamespace": "Dreamy.Audio.Tests",
+  "references": [
+    "Dreamy.Audio.Runtime",
+    "Dreamy.Audio.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

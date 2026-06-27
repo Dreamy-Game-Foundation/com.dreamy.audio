@@ -1,0 +1,19 @@
+{
+  "name": "Dreamy.Audio.Editor",
+  "rootNamespace": "Dreamy.Audio.Editor",
+  "references": [
+    "Dreamy.Audio.Runtime",
+    "Dreamy.Audio.Runtime.Components"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

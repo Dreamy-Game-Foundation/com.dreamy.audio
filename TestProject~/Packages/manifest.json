@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "com.dreamy.audio": "file:../..",
+    "com.unity.test-framework": "1.5.1"
+  },
+  "testables": [
+    "com.dreamy.audio"
+  ]
+}

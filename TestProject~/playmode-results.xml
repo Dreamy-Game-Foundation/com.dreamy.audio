@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-06-27 04:05:54Z" end-time="2026-06-27 04:05:55Z" duration="0,0292514">
+  <test-suite type="TestSuite" id="1008" name="TestProject~" fullname="TestProject~" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-06-27 04:05:54Z" end-time="2026-06-27 04:05:55Z" duration="0.029251" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1003" name="Dreamy.Audio.Tests.PlayMode.dll" fullname="E:/Unity_Work/Dreamy/Dreamy Foundation/com.dreamy.audio/TestProject~/Library/ScriptAssemblies/Dreamy.Audio.Tests.PlayMode.dll" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-06-27 04:05:54Z" end-time="2026-06-27 04:05:55Z" duration="0.021953" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="120536" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1004" name="Dreamy" fullname="Dreamy" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-06-27 04:05:54Z" end-time="2026-06-27 04:05:55Z" duration="0.021129" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1005" name="Audio" fullname="Dreamy.Audio" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-06-27 04:05:54Z" end-time="2026-06-27 04:05:55Z" duration="0.020772" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1006" name="Tests" fullname="Dreamy.Audio.Tests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-06-27 04:05:54Z" end-time="2026-06-27 04:05:55Z" duration="0.020392" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="AudioRuntimeSmokeTests" fullname="Dreamy.Audio.Tests.AudioRuntimeSmokeTests" classname="Dreamy.Audio.Tests.AudioRuntimeSmokeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-06-27 04:05:54Z" end-time="2026-06-27 04:05:55Z" duration="0.019447" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1002" name="DreamyAudio_Service_IsAvailable" fullname="Dreamy.Audio.Tests.AudioRuntimeSmokeTests.DreamyAudio_Service_IsAvailable" methodname="DreamyAudio_Service_IsAvailable" classname="Dreamy.Audio.Tests.AudioRuntimeSmokeTests" runstate="Runnable" seed="1539736412" result="Passed" start-time="2026-06-27 04:05:55Z" end-time="2026-06-27 04:05:55Z" duration="0.010801" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: E:\Unity_Work\Dreamy\Dreamy Foundation\com.dreamy.audio\TestProject~\playmode-results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
