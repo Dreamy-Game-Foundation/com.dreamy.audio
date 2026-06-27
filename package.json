@@ -1,0 +1,29 @@
+{
+  "name": "com.dreamy.audio",
+  "version": "0.1.0",
+  "displayName": "Dreamy Audio",
+  "description": "Catalog-driven audio playback, mixer bus control, pooling, validation, and gameplay trigger components for DreamyBase projects.",
+  "unity": "6000.0",
+  "dependencies": {
+    "com.unity.ugui": "2.0.0",
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.particlesystem": "1.0.0"
+  },
+  "keywords": [
+    "audio",
+    "sound",
+    "music",
+    "dreamy"
+  ],
+  "author": {
+    "name": "Dreamy"
+  },
+  "samples": [
+    {
+      "displayName": "Basic Playback",
+      "description": "Minimal profile, catalog, and playback examples.",
+      "path": "Samples~/Basic Playback"
+    }
+  ]
+}

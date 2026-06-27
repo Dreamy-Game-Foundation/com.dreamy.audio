@@ -1,0 +1,19 @@
+{
+  "name": "Dreamy.Audio.Runtime.Components",
+  "rootNamespace": "Dreamy.Audio.Components",
+  "references": [
+    "Dreamy.Audio.Runtime",
+    "Unity.ugui",
+    "UnityEngine.PhysicsModule",
+    "UnityEngine.ParticleSystemModule"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

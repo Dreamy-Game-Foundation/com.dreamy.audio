@@ -1,0 +1,9 @@
+TestProject~/Library/
+TestProject~/Logs/
+TestProject~/UserSettings/
+TestProject~/Temp/
+TestProject~/Obj/
+TestProject~/Build/
+TestProject~/Builds/
+*.log
+*.log.meta
