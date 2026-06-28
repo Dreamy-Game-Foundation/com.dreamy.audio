@@ -7,8 +7,9 @@ namespace Dreamy.Audio.Tests
     {
         public static void Set<T>(T target, string fieldName, object value)
         {
-            var field = typeof(T).GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic);
-            AssertField(field, typeof(T), fieldName);
+            var owner = typeof(T);
+            var field = FindField(owner, fieldName);
+            AssertField(field, owner, fieldName);
             field.SetValue(target, value);
         }
 
@@ -41,6 +42,23 @@ namespace Dreamy.Audio.Tests
             {
                 throw new System.MissingFieldException(owner.FullName, fieldName);
             }
+        }
+
+        private static FieldInfo FindField(System.Type owner, string fieldName)
+        {
+            var type = owner;
+            while (type != null)
+            {
+                var field = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic);
+                if (field != null)
+                {
+                    return field;
+                }
+
+                type = type.BaseType;
+            }
+
+            return null;
         }
     }
 }

@@ -52,5 +52,39 @@ namespace Dreamy.Audio.Tests
             Object.DestroyImmediate(catalog);
             Object.DestroyImmediate(profile);
         }
+
+        [Test]
+        public void ValidateProfile_WithLibraryDuplicateKey_ReturnsError()
+        {
+            var profile = ScriptableObject.CreateInstance<DreamyAudioProfile>();
+            var catalog = ScriptableObject.CreateInstance<DreamyAudioCatalog>();
+            var library = ScriptableObject.CreateInstance<AudioLibrary>();
+            var sound = ScriptableObject.CreateInstance<SoundAudioFile>();
+            TestSerialized.Set(catalog, "catalogId", "core");
+            TestSerialized.Set(catalog, "events", new System.Collections.Generic.List<AudioEventDefinition>
+            {
+                TestSerialized.CreateEvent("ui.click", AudioBusId.Sfx, TestSerialized.CreateVariant())
+            });
+            TestSerialized.Set(sound, "key", "ui.click");
+            TestSerialized.Set(sound, "clips", new System.Collections.Generic.List<AudioClip>
+            {
+                AudioClip.Create("click", 32, 1, 44100, false)
+            });
+            TestSerialized.Set(library, "sounds", new System.Collections.Generic.List<SoundAudioFile> { sound });
+            TestSerialized.Set(catalog, "libraries", new System.Collections.Generic.List<AudioLibrary> { library });
+            TestSerialized.Set(profile, "buses", new System.Collections.Generic.List<AudioBusDefinition>
+            {
+                TestSerialized.CreateBus("sfx")
+            });
+            TestSerialized.Set(profile, "catalogs", new System.Collections.Generic.List<DreamyAudioCatalog> { catalog });
+
+            var issues = AudioCatalogValidator.Validate(profile);
+
+            Assert.That(issues.Exists(issue => issue.Code == "AUDIO_DUPLICATE_KEY"), Is.True);
+            Object.DestroyImmediate(sound);
+            Object.DestroyImmediate(library);
+            Object.DestroyImmediate(catalog);
+            Object.DestroyImmediate(profile);
+        }
     }
 }

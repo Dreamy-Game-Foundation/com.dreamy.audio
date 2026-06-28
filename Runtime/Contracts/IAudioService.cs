@@ -10,10 +10,14 @@ namespace Dreamy.Audio
 
         void Initialize(DreamyAudioProfile profile);
         AudioPlayResult Play(AudioKey key);
+        AudioPlayResult Play(AudioFileObject file);
         AudioPlayResult Play(AudioKey key, Vector3 position);
+        AudioPlayResult Play(AudioFileObject file, Vector3 position);
         AudioPlayResult PlayAttached(AudioKey key, Transform target);
+        AudioPlayResult PlayAttached(AudioFileObject file, Transform target);
         AudioHandle PlayLoop(AudioKey key);
         AudioHandle PlayMusic(AudioKey key, AudioTransition transition);
+        AudioHandle PlayMusic(MusicAudioFile file, AudioTransition transition);
         bool Stop(AudioHandle handle, AudioTransition transition = default);
         void StopBus(AudioBusId bus, AudioTransition transition = default);
         void PauseBus(AudioBusId bus);

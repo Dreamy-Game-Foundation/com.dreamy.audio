@@ -69,14 +69,29 @@ namespace Dreamy.Audio
             return PlayInternal(key, null, null, false, default);
         }
 
+        public AudioPlayResult Play(AudioFileObject file)
+        {
+            return PlayInternal(file, null, null, false, default);
+        }
+
         public AudioPlayResult Play(AudioKey key, Vector3 position)
         {
             return PlayInternal(key, position, null, false, default);
         }
 
+        public AudioPlayResult Play(AudioFileObject file, Vector3 position)
+        {
+            return PlayInternal(file, position, null, false, default);
+        }
+
         public AudioPlayResult PlayAttached(AudioKey key, Transform target)
         {
             return PlayInternal(key, null, target, false, default);
+        }
+
+        public AudioPlayResult PlayAttached(AudioFileObject file, Transform target)
+        {
+            return PlayInternal(file, null, target, false, default);
         }
 
         public AudioHandle PlayLoop(AudioKey key)
@@ -92,6 +107,16 @@ namespace Dreamy.Audio
             }
 
             return PlayInternal(key, null, null, true, transition).Handle;
+        }
+
+        public AudioHandle PlayMusic(MusicAudioFile file, AudioTransition transition)
+        {
+            if (file != null)
+            {
+                StopBus(file.Bus, transition);
+            }
+
+            return PlayInternal(file, null, null, true, transition).Handle;
         }
 
         public bool Stop(AudioHandle handle, AudioTransition transition = default)
@@ -296,6 +321,72 @@ namespace Dreamy.Audio
             return AudioPlayResult.Played(handle);
         }
 
+        private AudioPlayResult PlayInternal(AudioFileObject file, Vector3? position, Transform target, bool forceLoop, AudioTransition transition)
+        {
+            if (!IsInitialized)
+            {
+                return AudioPlayResult.Fail(profile == null ? AudioPlayStatus.MissingProfile : AudioPlayStatus.MissingService, "DreamyAudio is not initialized.");
+            }
+
+            if (file == null)
+            {
+                return AudioPlayResult.Fail(AudioPlayStatus.MissingKey, "Audio file is null.");
+            }
+
+            var key = new AudioKey("direct", file.Key);
+            return PlayResolved(key, file.ToEventDefinition(), position, target, forceLoop, transition);
+        }
+
+        private AudioPlayResult PlayResolved(AudioKey key, AudioEventDefinition definition, Vector3? position, Transform target, bool forceLoop, AudioTransition transition)
+        {
+            if (mutedBuses.TryGetValue(definition.Bus.Value, out var muted) && muted)
+            {
+                return AudioPlayResult.Fail(AudioPlayStatus.Muted, $"Audio bus '{definition.Bus}' is muted.");
+            }
+
+            var clock = Time.unscaledTime;
+            if (definition.CooldownSeconds > 0f && lastPlayTimes.TryGetValue(key.ToString(), out var lastTime) && clock - lastTime < definition.CooldownSeconds)
+            {
+                return AudioPlayResult.Fail(AudioPlayStatus.Cooldown, $"Audio key '{key}' is on cooldown.");
+            }
+
+            if (definition.MaxInstances > 0 && instanceCounts.TryGetValue(key.ToString(), out var count) && count >= definition.MaxInstances)
+            {
+                return AudioPlayResult.Fail(AudioPlayStatus.InstanceLimit, $"Audio key '{key}' reached max instances.");
+            }
+
+            var variant = definition.SelectVariant();
+            if (variant == null || variant.Clip == null)
+            {
+                return AudioPlayResult.Fail(AudioPlayStatus.MissingClip, $"Audio key '{key}' has no playable clip.");
+            }
+
+            if (!pool.TryRent(out var source))
+            {
+                return AudioPlayResult.Fail(AudioPlayStatus.PoolLimit, "AudioSource pool reached its limit.");
+            }
+
+            ConfigureSource(source, definition, variant, position, target);
+            var handle = new AudioHandle(nextHandleId++);
+            var voice = new ActiveVoice
+            {
+                Handle = handle,
+                Key = key,
+                Bus = definition.Bus,
+                Source = source,
+                Looping = forceLoop || definition.Loop,
+                Priority = definition.Priority
+            };
+
+            source.loop = voice.Looping;
+            source.Play();
+            voices[handle.Id] = voice;
+            IncrementInstance(key);
+            lastPlayTimes[key.ToString()] = clock;
+
+            return AudioPlayResult.Played(handle);
+        }
+
         private bool TryResolve(AudioKey key, out AudioEventDefinition definition, out AudioPlayResult failure)
         {
             definition = null;
@@ -308,15 +399,33 @@ namespace Dreamy.Audio
             for (var i = 0; i < profile.Catalogs.Count; i++)
             {
                 var catalog = profile.Catalogs[i];
-                if (catalog == null || catalog.CatalogId != key.CatalogId)
+                if (catalog == null)
                 {
                     continue;
                 }
 
-                if (catalog.TryGetEvent(key.Key, out definition))
+                if (catalog.CatalogId == key.CatalogId && catalog.TryGetEvent(key.Key, out definition))
                 {
                     failure = default;
                     return true;
+                }
+
+                if (catalog.CatalogId == key.CatalogId && catalog.TryGetFile(key.Key, out var file))
+                {
+                    definition = file.ToEventDefinition();
+                    failure = default;
+                    return true;
+                }
+
+                for (var j = 0; j < catalog.Libraries.Count; j++)
+                {
+                    var library = catalog.Libraries[j];
+                    if (library != null && library.LibraryId == key.CatalogId && library.TryGetFile(key.Key, out file))
+                    {
+                        definition = file.ToEventDefinition();
+                        failure = default;
+                        return true;
+                    }
                 }
             }
 
@@ -327,11 +436,14 @@ namespace Dreamy.Audio
         private void ConfigureSource(AudioSource source, AudioEventDefinition definition, AudioVariant variant, Vector3? position, Transform target)
         {
             source.clip = variant.Clip;
-            source.outputAudioMixerGroup = profile.TryGetBus(definition.Bus, out var bus) ? bus.MixerGroup : null;
+            source.outputAudioMixerGroup = definition.MixerGroupOverride != null ? definition.MixerGroupOverride : profile.TryGetBus(definition.Bus, out var bus) ? bus.MixerGroup : null;
             source.volume = definition.Volume * variant.VolumeMultiplier * GetVolume(definition.Bus);
             source.pitch = definition.Pitch * variant.PitchMultiplier;
             source.priority = definition.Priority;
             source.ignoreListenerPause = definition.TimeMode == AudioTimeMode.IgnoreListenerPause;
+            source.bypassEffects = definition.BypassEffects;
+            source.bypassListenerEffects = definition.BypassListenerEffects;
+            source.bypassReverbZones = definition.BypassReverbZones;
             source.spatialBlend = definition.Spatial.SpatialBlend;
             source.minDistance = definition.Spatial.MinDistance;
             source.maxDistance = definition.Spatial.MaxDistance;

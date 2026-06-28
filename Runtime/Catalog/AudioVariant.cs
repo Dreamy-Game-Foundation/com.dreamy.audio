@@ -11,6 +11,15 @@ namespace Dreamy.Audio
         [SerializeField, Range(0f, 2f)] private float volumeMultiplier = 1f;
         [SerializeField, Range(-3f, 3f)] private float pitchMultiplier = 1f;
 
+        public AudioVariant()
+        {
+        }
+
+        public AudioVariant(AudioClip clip)
+        {
+            this.clip = clip;
+        }
+
         public AudioClip Clip => clip;
         public float Weight => Mathf.Max(0f, weight);
         public float VolumeMultiplier => Mathf.Clamp(volumeMultiplier, 0f, 2f);

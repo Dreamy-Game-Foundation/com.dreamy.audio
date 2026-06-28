@@ -20,10 +20,14 @@ namespace Dreamy.Audio
         }
 
         public static AudioPlayResult Play(AudioKey key) => Service.Play(key);
+        public static AudioPlayResult Play(AudioFileObject file) => Service.Play(file);
         public static AudioPlayResult Play(AudioKey key, Vector3 position) => Service.Play(key, position);
+        public static AudioPlayResult Play(AudioFileObject file, Vector3 position) => Service.Play(file, position);
         public static AudioPlayResult PlayAttached(AudioKey key, Transform target) => Service.PlayAttached(key, target);
+        public static AudioPlayResult PlayAttached(AudioFileObject file, Transform target) => Service.PlayAttached(file, target);
         public static AudioHandle PlayLoop(AudioKey key) => Service.PlayLoop(key);
         public static AudioHandle PlayMusic(AudioKey key, AudioTransition transition = default) => Service.PlayMusic(key, transition);
+        public static AudioHandle PlayMusic(MusicAudioFile file, AudioTransition transition = default) => Service.PlayMusic(file, transition);
         public static bool Stop(AudioHandle handle, AudioTransition transition = default) => Service.Stop(handle, transition);
         public static void StopBus(AudioBusId bus, AudioTransition transition = default) => Service.StopBus(bus, transition);
         public static float GetVolume(AudioBusId bus) => Service.GetVolume(bus);

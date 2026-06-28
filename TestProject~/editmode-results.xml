@@ -1,66 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0,0360755">
-  <test-suite type="TestSuite" id="1000" name="TestProject~" fullname="TestProject~" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.036076" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+<test-run id="2" testcasecount="8" result="Passed" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0,0400618">
+  <test-suite type="TestSuite" id="1000" name="TestProject~" fullname="TestProject~" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.040062" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
     <properties>
       <property name="platform" value="EditMode" />
     </properties>
-    <test-suite type="Assembly" id="1010" name="Dreamy.Audio.Tests.EditMode.dll" fullname="E:/Unity_Work/Dreamy/Dreamy Foundation/com.dreamy.audio/TestProject~/Library/ScriptAssemblies/Dreamy.Audio.Tests.EditMode.dll" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.029334" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <test-suite type="Assembly" id="1012" name="Dreamy.Audio.Tests.EditMode.dll" fullname="E:/Unity_Work/Dreamy/Dreamy Foundation/com.dreamy.audio/TestProject~/Library/ScriptAssemblies/Dreamy.Audio.Tests.EditMode.dll" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.033385" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
       <properties>
-        <property name="_PID" value="104268" />
+        <property name="_PID" value="2288" />
         <property name="_APPDOMAIN" value="Unity Child Domain" />
         <property name="platform" value="EditMode" />
         <property name="EditorOnly" value="True" />
       </properties>
-      <test-suite type="TestSuite" id="1011" name="Dreamy" fullname="Dreamy" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.028892" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <test-suite type="TestSuite" id="1013" name="Dreamy" fullname="Dreamy" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.032944" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
         <properties />
-        <test-suite type="TestSuite" id="1012" name="Audio" fullname="Dreamy.Audio" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.028652" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <test-suite type="TestSuite" id="1014" name="Audio" fullname="Dreamy.Audio" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.032692" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
           <properties />
-          <test-suite type="TestSuite" id="1013" name="Tests" fullname="Dreamy.Audio.Tests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.028367" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <test-suite type="TestSuite" id="1015" name="Tests" fullname="Dreamy.Audio.Tests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.032407" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
             <properties />
-            <test-suite type="TestFixture" id="1001" name="AudioCatalogValidatorTests" fullname="Dreamy.Audio.Tests.AudioCatalogValidatorTests" classname="Dreamy.Audio.Tests.AudioCatalogValidatorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.020778" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <test-suite type="TestFixture" id="1001" name="AudioCatalogValidatorTests" fullname="Dreamy.Audio.Tests.AudioCatalogValidatorTests" classname="Dreamy.Audio.Tests.AudioCatalogValidatorTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.023842" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
               <properties />
-              <test-case id="1002" name="ValidateProfile_WithDuplicateKey_ReturnsError" fullname="Dreamy.Audio.Tests.AudioCatalogValidatorTests.ValidateProfile_WithDuplicateKey_ReturnsError" methodname="ValidateProfile_WithDuplicateKey_ReturnsError" classname="Dreamy.Audio.Tests.AudioCatalogValidatorTests" runstate="Runnable" seed="1142470236" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.011332" asserts="0">
+              <test-case id="1002" name="ValidateProfile_WithDuplicateKey_ReturnsError" fullname="Dreamy.Audio.Tests.AudioCatalogValidatorTests.ValidateProfile_WithDuplicateKey_ReturnsError" methodname="ValidateProfile_WithDuplicateKey_ReturnsError" classname="Dreamy.Audio.Tests.AudioCatalogValidatorTests" runstate="Runnable" seed="236568390" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.011702" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1003" name="ValidateProfile_WithMissingClip_ReturnsError" fullname="Dreamy.Audio.Tests.AudioCatalogValidatorTests.ValidateProfile_WithMissingClip_ReturnsError" methodname="ValidateProfile_WithMissingClip_ReturnsError" classname="Dreamy.Audio.Tests.AudioCatalogValidatorTests" runstate="Runnable" seed="729046999" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.000431" asserts="0">
+              <test-case id="1004" name="ValidateProfile_WithLibraryDuplicateKey_ReturnsError" fullname="Dreamy.Audio.Tests.AudioCatalogValidatorTests.ValidateProfile_WithLibraryDuplicateKey_ReturnsError" methodname="ValidateProfile_WithLibraryDuplicateKey_ReturnsError" classname="Dreamy.Audio.Tests.AudioCatalogValidatorTests" runstate="Runnable" seed="1766824632" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.001805" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1003" name="ValidateProfile_WithMissingClip_ReturnsError" fullname="Dreamy.Audio.Tests.AudioCatalogValidatorTests.ValidateProfile_WithMissingClip_ReturnsError" methodname="ValidateProfile_WithMissingClip_ReturnsError" classname="Dreamy.Audio.Tests.AudioCatalogValidatorTests" runstate="Runnable" seed="1796593533" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.000429" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
             </test-suite>
-            <test-suite type="TestFixture" id="1004" name="AudioKeyGeneratorTests" fullname="Dreamy.Audio.Tests.AudioKeyGeneratorTests" classname="Dreamy.Audio.Tests.AudioKeyGeneratorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.004642" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <test-suite type="TestFixture" id="1005" name="AudioKeyGeneratorTests" fullname="Dreamy.Audio.Tests.AudioKeyGeneratorTests" classname="Dreamy.Audio.Tests.AudioKeyGeneratorTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.005762" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
               <properties />
-              <test-case id="1006" name="Generate_IncludesCatalogAndKey" fullname="Dreamy.Audio.Tests.AudioKeyGeneratorTests.Generate_IncludesCatalogAndKey" methodname="Generate_IncludesCatalogAndKey" classname="Dreamy.Audio.Tests.AudioKeyGeneratorTests" runstate="Runnable" seed="2013814169" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.001083" asserts="0">
+              <test-case id="1007" name="Generate_IncludesCatalogAndKey" fullname="Dreamy.Audio.Tests.AudioKeyGeneratorTests.Generate_IncludesCatalogAndKey" methodname="Generate_IncludesCatalogAndKey" classname="Dreamy.Audio.Tests.AudioKeyGeneratorTests" runstate="Runnable" seed="1049344467" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.001226" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1005" name="ToIdentifier_ConvertsGroupedKeyToPascalName" fullname="Dreamy.Audio.Tests.AudioKeyGeneratorTests.ToIdentifier_ConvertsGroupedKeyToPascalName" methodname="ToIdentifier_ConvertsGroupedKeyToPascalName" classname="Dreamy.Audio.Tests.AudioKeyGeneratorTests" runstate="Runnable" seed="943291406" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.002387" asserts="0">
+              <test-case id="1008" name="GenerateLibrary_EmitsSoundAndMusicEnums" fullname="Dreamy.Audio.Tests.AudioKeyGeneratorTests.GenerateLibrary_EmitsSoundAndMusicEnums" methodname="GenerateLibrary_EmitsSoundAndMusicEnums" classname="Dreamy.Audio.Tests.AudioKeyGeneratorTests" runstate="Runnable" seed="335745943" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.001076" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1006" name="ToIdentifier_ConvertsGroupedKeyToPascalName" fullname="Dreamy.Audio.Tests.AudioKeyGeneratorTests.ToIdentifier_ConvertsGroupedKeyToPascalName" methodname="ToIdentifier_ConvertsGroupedKeyToPascalName" classname="Dreamy.Audio.Tests.AudioKeyGeneratorTests" runstate="Runnable" seed="1502655744" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.002088" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
             </test-suite>
-            <test-suite type="TestFixture" id="1007" name="AudioKeyTests" fullname="Dreamy.Audio.Tests.AudioKeyTests" classname="Dreamy.Audio.Tests.AudioKeyTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.001900" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <test-suite type="TestFixture" id="1009" name="AudioKeyTests" fullname="Dreamy.Audio.Tests.AudioKeyTests" classname="Dreamy.Audio.Tests.AudioKeyTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.001614" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
               <properties />
-              <test-case id="1008" name="AudioKey_WithCatalogAndKey_IsValid" fullname="Dreamy.Audio.Tests.AudioKeyTests.AudioKey_WithCatalogAndKey_IsValid" methodname="AudioKey_WithCatalogAndKey_IsValid" classname="Dreamy.Audio.Tests.AudioKeyTests" runstate="Runnable" seed="537095666" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.000534" asserts="0">
+              <test-case id="1010" name="AudioKey_WithCatalogAndKey_IsValid" fullname="Dreamy.Audio.Tests.AudioKeyTests.AudioKey_WithCatalogAndKey_IsValid" methodname="AudioKey_WithCatalogAndKey_IsValid" classname="Dreamy.Audio.Tests.AudioKeyTests" runstate="Runnable" seed="1367252404" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.000455" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1009" name="AudioKey_WithWhitespace_IsInvalid" fullname="Dreamy.Audio.Tests.AudioKeyTests.AudioKey_WithWhitespace_IsInvalid" methodname="AudioKey_WithWhitespace_IsInvalid" classname="Dreamy.Audio.Tests.AudioKeyTests" runstate="Runnable" seed="2003014282" result="Passed" start-time="2026-06-27 04:03:16Z" end-time="2026-06-27 04:03:16Z" duration="0.000247" asserts="0">
+              <test-case id="1011" name="AudioKey_WithWhitespace_IsInvalid" fullname="Dreamy.Audio.Tests.AudioKeyTests.AudioKey_WithWhitespace_IsInvalid" methodname="AudioKey_WithWhitespace_IsInvalid" classname="Dreamy.Audio.Tests.AudioKeyTests" runstate="Runnable" seed="616978987" result="Passed" start-time="2026-06-28 09:18:54Z" end-time="2026-06-28 09:18:54Z" duration="0.000233" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
-                <output><![CDATA[Saving results to: editmode-results.xml
+                <output><![CDATA[Saving results to: E:\Unity_Work\Dreamy\Dreamy Foundation\com.dreamy.audio\TestProject~\editmode-results.xml
 ]]></output>
               </test-case>
             </test-suite>

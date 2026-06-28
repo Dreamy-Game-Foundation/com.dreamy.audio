@@ -9,6 +9,7 @@ namespace Dreamy.Audio.Editor
     {
         private DreamyAudioProfile profile;
         private DreamyAudioCatalog catalog;
+        private AudioLibrary library;
         private Vector2 scroll;
 
         [MenuItem("Tools/Dreamy/Audio")]
@@ -22,6 +23,7 @@ namespace Dreamy.Audio.Editor
             scroll = EditorGUILayout.BeginScrollView(scroll);
             profile = (DreamyAudioProfile)EditorGUILayout.ObjectField("Profile", profile, typeof(DreamyAudioProfile), false);
             catalog = (DreamyAudioCatalog)EditorGUILayout.ObjectField("Catalog", catalog, typeof(DreamyAudioCatalog), false);
+            library = (AudioLibrary)EditorGUILayout.ObjectField("Library", library, typeof(AudioLibrary), false);
 
             EditorGUILayout.Space();
             using (new EditorGUILayout.HorizontalScope())
@@ -35,9 +37,27 @@ namespace Dreamy.Audio.Editor
                 {
                     CreateAsset<DreamyAudioCatalog>("DreamyAudioCatalog.asset");
                 }
+
+                if (GUILayout.Button("Create Library"))
+                {
+                    CreateAsset<AudioLibrary>("DreamyAudioLibrary.asset");
+                }
             }
 
             EditorGUILayout.Space();
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (GUILayout.Button("Open File Wizard"))
+                {
+                    AudioFileWizard.Open();
+                }
+
+                if (GUILayout.Button("Open Playback Tool"))
+                {
+                    AudioPlaybackTool.Open();
+                }
+            }
+
             if (GUILayout.Button("Validate Profile") && profile != null)
             {
                 var issues = AudioCatalogValidator.Validate(profile);
@@ -67,6 +87,23 @@ namespace Dreamy.Audio.Editor
                     }
 
                     File.WriteAllText(path, AudioKeyGenerator.Generate(catalog));
+                    AssetDatabase.Refresh();
+                }
+            }
+
+            if (GUILayout.Button("Generate Library Enums") && library != null)
+            {
+                var defaultPath = $"Assets/Generated/DreamyAudio/{library.name}AudioLibraryKeys.cs";
+                var path = EditorUtility.SaveFilePanelInProject("Generate Audio Library Keys", Path.GetFileName(defaultPath), "cs", "Choose generated key output path.", Path.GetDirectoryName(defaultPath));
+                if (!string.IsNullOrEmpty(path))
+                {
+                    var directory = Path.GetDirectoryName(path);
+                    if (!string.IsNullOrEmpty(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+
+                    File.WriteAllText(path, AudioKeyGenerator.Generate(library));
                     AssetDatabase.Refresh();
                 }
             }

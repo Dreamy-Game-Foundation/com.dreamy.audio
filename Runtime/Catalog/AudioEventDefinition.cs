@@ -42,6 +42,10 @@ namespace Dreamy.Audio
         public int MaxInstances => Mathf.Max(0, maxInstances);
         public float CooldownSeconds => Mathf.Max(0f, cooldownSeconds);
         public AudioSpatialSettings Spatial => spatial;
+        public UnityEngine.Audio.AudioMixerGroup MixerGroupOverride { get; private set; }
+        public bool BypassEffects { get; private set; }
+        public bool BypassListenerEffects { get; private set; }
+        public bool BypassReverbZones { get; private set; }
 
         public AudioVariant SelectVariant()
         {
@@ -82,6 +86,40 @@ namespace Dreamy.Audio
             }
 
             return variants[UnityEngine.Random.Range(0, variants.Count)];
+        }
+
+        public static AudioEventDefinition FromAudioFile(AudioFileObject file)
+        {
+            var definition = new AudioEventDefinition
+            {
+                key = file.Key,
+                displayName = file.DisplayName,
+                bus = file.Bus.Value,
+                eventType = file.EventType,
+                selectionMode = AudioVariantSelectionMode.Random,
+                volume = file.Volume,
+                pitch = file.Pitch + UnityEngine.Random.Range(-file.RandomPitch, file.RandomPitch),
+                fadeInSeconds = file.FadeInSeconds,
+                fadeOutSeconds = file.FadeOutSeconds,
+                loop = file.Loop,
+                timeMode = file.TimeMode,
+                priority = file.Priority,
+                maxInstances = file.MaxInstances,
+                cooldownSeconds = file.CooldownSeconds,
+                spatial = file.Spatial,
+                MixerGroupOverride = file.MixerGroupOverride,
+                BypassEffects = file.BypassEffects,
+                BypassListenerEffects = file.BypassListenerEffects,
+                BypassReverbZones = file.BypassReverbZones
+            };
+
+            var clip = file.SelectClip();
+            if (clip != null)
+            {
+                definition.variants.Add(new AudioVariant(clip));
+            }
+
+            return definition;
         }
     }
 }

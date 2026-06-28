@@ -28,5 +28,31 @@ namespace Dreamy.Audio.Tests
             Assert.That(generated, Does.Contain("new AudioKey(\"core\", \"ui.click\")"));
             Object.DestroyImmediate(catalog);
         }
+
+        [Test]
+        public void GenerateLibrary_EmitsSoundAndMusicEnums()
+        {
+            var library = ScriptableObject.CreateInstance<AudioLibrary>();
+            var sound = ScriptableObject.CreateInstance<SoundAudioFile>();
+            var music = ScriptableObject.CreateInstance<MusicAudioFile>();
+            TestSerialized.Set(library, "libraryId", "core");
+            TestSerialized.Set(library, "soundEnumName", "CoreSounds");
+            TestSerialized.Set(library, "musicEnumName", "CoreMusic");
+            TestSerialized.Set(sound, "key", "ui.click");
+            TestSerialized.Set(music, "key", "theme.main");
+            TestSerialized.Set(library, "sounds", new System.Collections.Generic.List<SoundAudioFile> { sound });
+            TestSerialized.Set(library, "music", new System.Collections.Generic.List<MusicAudioFile> { music });
+
+            var generated = AudioKeyGenerator.Generate(library);
+
+            Assert.That(generated, Does.Contain("public enum CoreSounds"));
+            Assert.That(generated, Does.Contain("public enum CoreMusic"));
+            Assert.That(generated, Does.Contain("UiClick"));
+            Assert.That(generated, Does.Contain("ThemeMain"));
+            Assert.That(generated, Does.Contain("new AudioKey(\"core\", \"ui.click\")"));
+            Object.DestroyImmediate(library);
+            Object.DestroyImmediate(sound);
+            Object.DestroyImmediate(music);
+        }
     }
 }
