@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Reflection;
 
 namespace Dreamy.Audio.Tests
 {
@@ -19,6 +20,15 @@ namespace Dreamy.Audio.Tests
             var key = new AudioKey("core", "bad key");
 
             Assert.That(key.IsValid, Is.False);
+        }
+
+        [Test]
+        public void AudioKey_BackingFields_AreWritableForUnitySerialization()
+        {
+            var fields = typeof(AudioKey).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+
+            Assert.That(fields, Has.Some.Matches<FieldInfo>(field => field.Name == "catalogId" && !field.IsInitOnly));
+            Assert.That(fields, Has.Some.Matches<FieldInfo>(field => field.Name == "key" && !field.IsInitOnly));
         }
     }
 }

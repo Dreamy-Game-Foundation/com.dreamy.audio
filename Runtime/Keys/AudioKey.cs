@@ -4,10 +4,10 @@ using UnityEngine;
 namespace Dreamy.Audio
 {
     [Serializable]
-    public readonly struct AudioKey : IEquatable<AudioKey>
+    public struct AudioKey : IEquatable<AudioKey>
     {
-        [SerializeField] private readonly string catalogId;
-        [SerializeField] private readonly string key;
+        [SerializeField] private string catalogId;
+        [SerializeField] private string key;
 
         public AudioKey(string catalogId, string key)
         {

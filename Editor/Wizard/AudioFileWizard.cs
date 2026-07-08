@@ -16,13 +16,13 @@ namespace Dreamy.Audio.Editor
         private string musicBus = "music";
         private Vector2 scroll;
 
-        [MenuItem("Tools/Dreamy/Audio File Wizard")]
+        [MenuItem("Tools/Dreamy/Audio/File Wizard")]
         public static void Open()
         {
             GetWindow<AudioFileWizard>("Audio File Wizard");
         }
 
-        [MenuItem("Assets/Dreamy/Create Audio Files From Selection")]
+        [MenuItem("Assets/Dreamy/Audio/Create Audio Files From Selection")]
         private static void OpenFromSelection()
         {
             Open();
