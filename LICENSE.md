@@ -1,5 +1,5 @@
 # License
 
-Copyright Dreamy.
+Copyright Dreamy Studio.
 
-Internal Dreamy package unless a project-specific license is supplied.
+Internal Dreamy Studio package unless a project-specific license is supplied.
