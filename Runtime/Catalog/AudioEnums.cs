@@ -16,6 +16,12 @@ namespace Dreamy.Audio
         Sequential
     }
 
+    public enum AudioLoopMode
+    {
+        WholeClip,
+        IntroThenLoop
+    }
+
     public enum AudioTimeMode
     {
         Scaled,

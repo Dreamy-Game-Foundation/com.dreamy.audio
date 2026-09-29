@@ -100,6 +100,10 @@ namespace Dreamy.Audio.Editor
             clips.ClearArray();
             clips.InsertArrayElementAtIndex(0);
             clips.GetArrayElementAtIndex(0).objectReferenceValue = clip;
+            var weights = serialized.FindProperty("clipWeights");
+            weights.ClearArray();
+            weights.InsertArrayElementAtIndex(0);
+            weights.GetArrayElementAtIndex(0).floatValue = 1f;
             serialized.ApplyModifiedProperties();
             EditorUtility.SetDirty(file);
         }

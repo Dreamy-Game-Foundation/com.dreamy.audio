@@ -7,16 +7,39 @@ namespace Dreamy.Audio
     public sealed class DreamyAudioProfile : ScriptableObject
     {
         [SerializeField, Min(1)] private int schemaVersion = 1;
-        [SerializeField] private List<AudioBusDefinition> buses = new List<AudioBusDefinition>();
-        [SerializeField] private List<DreamyAudioCatalog> catalogs = new List<DreamyAudioCatalog>();
+        [SerializeField] private List<AudioBusDefinition> buses = CreateCasualDefaultBuses();
+        [SerializeField] private List<AudioLibrary> libraries = new List<AudioLibrary>();
         [SerializeField, Min(1)] private int initialPoolSize = 16;
         [SerializeField, Min(1)] private int maxPoolSize = 64;
         [SerializeField] private bool dontDestroyOnLoad = true;
         [SerializeField] private bool logWarnings = true;
 
+        /// <summary>Adds only missing casual-game buses; existing bus settings are left unchanged.</summary>
+        [ContextMenu("Add Missing Casual Default Buses")]
+        public void AddMissingCasualDefaultBuses()
+        {
+            buses ??= new List<AudioBusDefinition>();
+            foreach (var defaultBus in CreateCasualDefaultBuses())
+            {
+                if (!TryGetBus(defaultBus.Id, out _)) buses.Add(defaultBus);
+            }
+        }
+
+        private static List<AudioBusDefinition> CreateCasualDefaultBuses()
+        {
+            return new List<AudioBusDefinition>
+            {
+                AudioBusDefinition.Create(AudioBusId.Music.Value, "Music", 0.8f, 2),
+                AudioBusDefinition.Create(AudioBusId.Sfx.Value, "SFX", 1f, 24),
+                AudioBusDefinition.Create(AudioBusId.Ui.Value, "UI", 1f, 8),
+                AudioBusDefinition.Create(AudioBusId.Voice.Value, "Voice", 1f, 4),
+                AudioBusDefinition.Create(AudioBusId.Ambience.Value, "Ambience", 0.7f, 4)
+            };
+        }
+
         public int SchemaVersion => schemaVersion;
         public IReadOnlyList<AudioBusDefinition> Buses => buses;
-        public IReadOnlyList<DreamyAudioCatalog> Catalogs => catalogs;
+        public IReadOnlyList<AudioLibrary> Libraries => libraries;
         public int InitialPoolSize => Mathf.Max(1, initialPoolSize);
         public int MaxPoolSize => Mathf.Max(InitialPoolSize, maxPoolSize);
         public bool KeepAliveAcrossScenes => dontDestroyOnLoad;

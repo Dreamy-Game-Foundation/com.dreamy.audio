@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Dreamy.Audio.Components
 {
     public sealed class AudioAnimationEventReceiver : MonoBehaviour
     {
-        [SerializeField] private string defaultCatalogId = "core";
+        [FormerlySerializedAs("defaultCatalogId")]
+        [SerializeField] private string defaultLibraryId = "core";
 
         public void PlayAudio(string key)
         {
@@ -13,7 +15,7 @@ namespace Dreamy.Audio.Components
                 return;
             }
 
-            DreamyAudio.Play(new AudioKey(defaultCatalogId, key), transform.position);
+            DreamyAudio.Play(new AudioKey(defaultLibraryId, key), transform.position);
         }
     }
 }

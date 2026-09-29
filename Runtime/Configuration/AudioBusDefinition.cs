@@ -16,6 +16,18 @@ namespace Dreamy.Audio
         [SerializeField] private string preferenceKey;
         [SerializeField, Min(1)] private int voiceBudget = 32;
 
+        internal static AudioBusDefinition Create(string id, string displayName, float defaultVolume, int voiceBudget)
+        {
+            return new AudioBusDefinition
+            {
+                id = id ?? string.Empty,
+                displayName = displayName ?? string.Empty,
+                defaultVolume = Mathf.Clamp01(defaultVolume),
+                voiceBudget = Mathf.Max(1, voiceBudget),
+                persistVolume = true
+            };
+        }
+
         public AudioBusId Id => new AudioBusId(id);
         public string DisplayName => displayName;
         public AudioMixerGroup MixerGroup => mixerGroup;

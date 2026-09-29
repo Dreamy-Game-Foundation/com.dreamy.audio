@@ -7,29 +7,29 @@ namespace Dreamy.Audio.Editor
     public sealed class AudioKeyPropertyDrawer : PropertyDrawer
     {
         private const float FieldSpacing = 4f;
-        private const float CatalogWidthRatio = 0.38f;
+        private const float LibraryWidthRatio = 0.38f;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
 
             var contentPosition = EditorGUI.PrefixLabel(position, label);
-            var catalogProperty = property.FindPropertyRelative("catalogId");
+            var libraryProperty = property.FindPropertyRelative("libraryId");
             var keyProperty = property.FindPropertyRelative("key");
 
-            if (catalogProperty == null || keyProperty == null)
+            if (libraryProperty == null || keyProperty == null)
             {
                 EditorGUI.LabelField(contentPosition, "Invalid AudioKey backing fields");
                 EditorGUI.EndProperty();
                 return;
             }
 
-            var catalogWidth = Mathf.Floor((contentPosition.width - FieldSpacing) * CatalogWidthRatio);
-            var keyWidth = contentPosition.width - catalogWidth - FieldSpacing;
-            var catalogRect = new Rect(contentPosition.x, contentPosition.y, catalogWidth, contentPosition.height);
-            var keyRect = new Rect(catalogRect.xMax + FieldSpacing, contentPosition.y, keyWidth, contentPosition.height);
+            var libraryWidth = Mathf.Floor((contentPosition.width - FieldSpacing) * LibraryWidthRatio);
+            var keyWidth = contentPosition.width - libraryWidth - FieldSpacing;
+            var libraryRect = new Rect(contentPosition.x, contentPosition.y, libraryWidth, contentPosition.height);
+            var keyRect = new Rect(libraryRect.xMax + FieldSpacing, contentPosition.y, keyWidth, contentPosition.height);
 
-            catalogProperty.stringValue = EditorGUI.TextField(catalogRect, catalogProperty.stringValue);
+            libraryProperty.stringValue = EditorGUI.TextField(libraryRect, libraryProperty.stringValue);
             keyProperty.stringValue = EditorGUI.TextField(keyRect, keyProperty.stringValue);
 
             EditorGUI.EndProperty();

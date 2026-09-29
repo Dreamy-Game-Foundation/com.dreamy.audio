@@ -20,22 +20,6 @@ namespace Dreamy.Audio.Tests
             return bus;
         }
 
-        public static AudioVariant CreateVariant()
-        {
-            var variant = new AudioVariant();
-            Set(variant, "clip", AudioClip.Create("test", 32, 1, 44100, false));
-            return variant;
-        }
-
-        public static AudioEventDefinition CreateEvent(string key, AudioBusId bus, AudioVariant variant)
-        {
-            var audioEvent = new AudioEventDefinition();
-            Set(audioEvent, "key", key);
-            Set(audioEvent, "bus", bus.Value);
-            Set(audioEvent, "variants", new System.Collections.Generic.List<AudioVariant> { variant });
-            return audioEvent;
-        }
-
         private static void AssertField(FieldInfo field, System.Type owner, string fieldName)
         {
             if (field == null)

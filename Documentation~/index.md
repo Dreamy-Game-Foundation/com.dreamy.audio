@@ -2,18 +2,14 @@
 
 ## Quick start
 
-1. Create a `DreamyAudioProfile` through `Tools/Dreamy/Audio`.
-2. Create a `DreamyAudioCatalog`.
-3. Either add audio events directly to the catalog, or create an `AudioLibrary`.
-4. For library-driven setup, select `AudioClip` assets and run `Tools/Dreamy/Audio File Wizard` to create `SoundAudioFile` or `MusicAudioFile` assets.
-5. Assign the library to the catalog and the catalog to the profile.
-6. Add `AudioBootstrap` to a startup scene or initialize `DreamyAudio` from game bootstrap code.
-7. Call `DreamyAudio.Play(new AudioKey("core", "ui.click"))`, `DreamyAudio.Play(soundFile)`, or `DreamyAudio.PlayMusic(musicFile)`.
+1. Create a `DreamyAudioProfile` and an `AudioLibrary` through `Tools/Dreamy/Audio/Create`.
+2. Open `Tools/Dreamy/Audio/Audio Library`, then drag AudioClips or folders into Sound or Music groups.
+3. Assign the Libraries directly to the Profile.
+4. Add `AudioBootstrap` to a startup scene or initialize `DreamyAudio` from game bootstrap code.
+5. Call `DreamyAudio.Play(new AudioKey("sfx", "ui.click"))`, `DreamyAudio.Play(soundFile)`, or `DreamyAudio.PlayMusic(musicFile)`.
 
-Generated key constants and enums should live in the consuming project, not inside this package. Use `Tools/Dreamy/Audio` to generate catalog keys or library sound/music enums.
+Generated string constants should live in the consuming project, not inside this package. Use the Library window to export them.
 
 ## Tools
 
-- `Tools/Dreamy/Audio`: profile, catalog, library creation, validation, key generation, enum generation.
-- `Tools/Dreamy/Audio File Wizard`: batch converts selected clips or folders into audio file assets.
-- `Tools/Dreamy/Audio Playback Tool`: Play Mode preview for direct file assets, library entries, or typed keys.
+- `Tools/Dreamy/Audio`: profile and library creation, visual authoring, preview, validation, and string-ID generation.

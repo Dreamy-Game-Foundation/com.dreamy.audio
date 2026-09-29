@@ -9,13 +9,16 @@ namespace Dreamy.Audio
         IReadOnlyList<AudioBusDefinition> Buses { get; }
 
         void Initialize(DreamyAudioProfile profile);
+        AudioPlayResult Play(string id);
         AudioPlayResult Play(AudioKey key);
         AudioPlayResult Play(AudioFileObject file);
         AudioPlayResult Play(AudioKey key, Vector3 position);
         AudioPlayResult Play(AudioFileObject file, Vector3 position);
         AudioPlayResult PlayAttached(AudioKey key, Transform target);
         AudioPlayResult PlayAttached(AudioFileObject file, Transform target);
+        AudioHandle PlayLoop(string id);
         AudioHandle PlayLoop(AudioKey key);
+        AudioHandle PlayMusic(string id, AudioTransition transition = default);
         AudioHandle PlayMusic(AudioKey key, AudioTransition transition);
         AudioHandle PlayMusic(MusicAudioFile file, AudioTransition transition);
         bool Stop(AudioHandle handle, AudioTransition transition = default);

@@ -1,32 +1,36 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Dreamy.Audio
 {
     [Serializable]
     public struct AudioKey : IEquatable<AudioKey>
     {
-        [SerializeField] private string catalogId;
+        [FormerlySerializedAs("catalogId")]
+        [SerializeField] private string libraryId;
         [SerializeField] private string key;
 
-        public AudioKey(string catalogId, string key)
+        public AudioKey(string libraryId, string key)
         {
-            this.catalogId = catalogId ?? string.Empty;
+            this.libraryId = libraryId ?? string.Empty;
             this.key = key ?? string.Empty;
         }
 
-        public string CatalogId => catalogId ?? string.Empty;
+        public string LibraryId => libraryId ?? string.Empty;
         public string Key => key ?? string.Empty;
-        public bool IsValid => IsValidPart(CatalogId) && IsValidPart(Key);
+        /// <summary>Stable, human-readable identifier used in data, logs, and optional code constants.</summary>
+        public string Id => string.IsNullOrEmpty(LibraryId) ? Key : $"{LibraryId}/{Key}";
+        public bool IsValid => IsValidPart(LibraryId) && IsValidPart(Key);
 
         public override string ToString()
         {
-            return string.IsNullOrEmpty(CatalogId) ? Key : $"{CatalogId}:{Key}";
+            return Id;
         }
 
         public bool Equals(AudioKey other)
         {
-            return string.Equals(CatalogId, other.CatalogId, StringComparison.Ordinal)
+            return string.Equals(LibraryId, other.LibraryId, StringComparison.Ordinal)
                 && string.Equals(Key, other.Key, StringComparison.Ordinal);
         }
 
@@ -39,13 +43,37 @@ namespace Dreamy.Audio
         {
             unchecked
             {
-                return ((CatalogId != null ? CatalogId.GetHashCode() : 0) * 397)
+                return ((LibraryId != null ? LibraryId.GetHashCode() : 0) * 397)
                     ^ (Key != null ? Key.GetHashCode() : 0);
             }
         }
 
         public static bool operator ==(AudioKey left, AudioKey right) => left.Equals(right);
         public static bool operator !=(AudioKey left, AudioKey right) => !left.Equals(right);
+
+        /// <summary>Creates a key from the canonical <c>library/key</c> form.</summary>
+        public static AudioKey FromId(string id)
+        {
+            return TryParse(id, out var audioKey) ? audioKey : default;
+        }
+
+        public static bool TryParse(string id, out AudioKey audioKey)
+        {
+            audioKey = default;
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return false;
+            }
+
+            var separator = id.IndexOf( '/');
+            if (separator <= 0 || separator == id.Length - 1 || id.IndexOf( '/', separator + 1) >= 0)
+            {
+                return false;
+            }
+
+            audioKey = new AudioKey(id.Substring(0, separator), id.Substring(separator + 1));
+            return audioKey.IsValid;
+        }
 
         public static bool IsValidPart(string value)
         {
@@ -57,7 +85,7 @@ namespace Dreamy.Audio
             for (var i = 0; i < value.Length; i++)
             {
                 var c = value[i];
-                if (char.IsLetterOrDigit(c) || c == '_' || c == '-' || c == '.' || c == '/')
+                if (char.IsLetterOrDigit(c) || c == '_' || c == '-' || c == '.')
                 {
                     continue;
                 }
