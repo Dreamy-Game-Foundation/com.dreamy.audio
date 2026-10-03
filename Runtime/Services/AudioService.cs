@@ -22,6 +22,7 @@ namespace Dreamy.Audio
             public float FadeInRemaining;
             public float FadeInDuration;
             public float TargetVolume;
+            public float FadeVolume = 1f;
             public float RemainingFadeOut;
             public float FadeOutStartVolume;
         }
@@ -29,6 +30,8 @@ namespace Dreamy.Audio
         private readonly Dictionary<int, ActiveVoice> voices = new Dictionary<int, ActiveVoice>();
         private readonly Dictionary<string, float> lastPlayTimes = new Dictionary<string, float>();
         private readonly Dictionary<string, int> instanceCounts = new Dictionary<string, int>();
+        private readonly Dictionary<string, float> busVolumes = new Dictionary<string, float>();
+        private readonly HashSet<string> mixerControlledBuses = new HashSet<string>();
         private readonly Dictionary<string, bool> mutedBuses = new Dictionary<string, bool>();
         private readonly List<int> finishedVoiceIds = new List<int>();
         private readonly IAudioPreferenceStore preferenceStore;
@@ -70,6 +73,8 @@ namespace Dreamy.Audio
                 }
             }
 
+            busVolumes.Clear();
+            mixerControlledBuses.Clear();
             pool = new AudioSourcePool(root.transform, profile.InitialPoolSize, profile.MaxPoolSize);
             ApplyStoredBusVolumes();
         }
@@ -158,7 +163,7 @@ namespace Dreamy.Audio
             }
 
             voice.RemainingFadeOut = transition.Seconds;
-            voice.FadeOutStartVolume = voice.Source != null ? voice.Source.volume : 0f;
+            voice.FadeOutStartVolume = voice.FadeVolume;
             return true;
         }
 
@@ -208,6 +213,8 @@ namespace Dreamy.Audio
                 return 1f;
             }
 
+            if (busVolumes.TryGetValue(bus.Value, out var current)) return current;
+
             if (preferenceStore.TryGetFloat(definition.PreferenceKey, out var stored))
             {
                 return Mathf.Clamp01(stored);
@@ -224,18 +231,23 @@ namespace Dreamy.Audio
             }
 
             var clamped = Mathf.Clamp01(normalizedVolume);
+            busVolumes[bus.Value] = clamped;
             if (persist && definition.PersistVolume)
             {
                 preferenceStore.SetFloat(definition.PreferenceKey, clamped);
             }
 
             ApplyBusVolume(definition, clamped);
+            foreach (var voice in voices.Values)
+            {
+                if (voice.Bus == bus) ApplyVoiceVolume(voice);
+            }
         }
 
         public void SetMuted(AudioBusId bus, bool muted, bool persist = true)
         {
             mutedBuses[bus.Value] = muted;
-            SetVolume(bus, muted ? 0f : GetVolume(bus), persist);
+            SetVolume(bus, GetVolume(bus), persist);
         }
 
         internal void Tick(float deltaTime)
@@ -280,14 +292,16 @@ namespace Dreamy.Audio
                 {
                     voice.FadeInRemaining = Mathf.Max(0f, voice.FadeInRemaining - deltaTime);
                     var progress = 1f - voice.FadeInRemaining / Mathf.Max(0.0001f, voice.FadeInDuration);
-                    voice.Source.volume = voice.TargetVolume * Mathf.Clamp01(progress);
+                    voice.FadeVolume = Mathf.Clamp01(progress);
+                    ApplyVoiceVolume(voice);
                 }
 
                 if (voice.RemainingFadeOut > 0f)
                 {
                     voice.RemainingFadeOut -= deltaTime;
                     var t = Mathf.Clamp01(voice.RemainingFadeOut / Mathf.Max(0.0001f, deltaTime + voice.RemainingFadeOut));
-                    voice.Source.volume = voice.FadeOutStartVolume * t;
+                    voice.FadeVolume = voice.FadeOutStartVolume * t;
+                    ApplyVoiceVolume(voice);
                     if (voice.RemainingFadeOut <= 0f)
                     {
                         finishedVoiceIds.Add(voice.Handle.Id);
@@ -378,7 +392,7 @@ namespace Dreamy.Audio
                 PlaybackEndSeconds = file.EndSeconds > file.StartSeconds ? Mathf.Min(file.EndSeconds, clip.length) : clip.length,
                 Priority = file.Priority,
                 FollowTarget = target,
-                TargetVolume = source.volume
+                TargetVolume = file.Volume
             };
 
             source.loop = voice.Looping && !voice.HasLoopRegion && !voice.HasPlaybackEnd;
@@ -397,9 +411,10 @@ namespace Dreamy.Audio
             {
                 voice.FadeInDuration = fadeInSeconds;
                 voice.FadeInRemaining = fadeInSeconds;
-                source.volume = 0f;
+                voice.FadeVolume = 0f;
             }
 
+            ApplyVoiceVolume(voice);
             return AudioPlayResult.Played(handle);
         }
 
@@ -443,7 +458,7 @@ namespace Dreamy.Audio
         {
             source.clip = clip;
             source.outputAudioMixerGroup = file.MixerGroupOverride != null ? file.MixerGroupOverride : profile.TryGetBus(file.Bus, out var bus) ? bus.MixerGroup : null;
-            source.volume = file.Volume * 1f * GetVolume(file.Bus);
+            source.volume = file.Volume;
             source.pitch = file.Pitch + Random.Range(-file.RandomPitch, file.RandomPitch);
             source.priority = file.Priority;
             source.ignoreListenerPause = file.TimeMode == AudioTimeMode.IgnoreListenerPause;
@@ -517,15 +532,33 @@ namespace Dreamy.Audio
             }
         }
 
-        private static void ApplyBusVolume(AudioBusDefinition bus, float normalizedVolume)
+        private void ApplyBusVolume(AudioBusDefinition bus, float normalizedVolume)
         {
             if (bus.MixerGroup == null || string.IsNullOrWhiteSpace(bus.ExposedVolumeParameter))
             {
                 return;
             }
 
+            if (mutedBuses.TryGetValue(bus.Id.Value, out var muted) && muted) normalizedVolume = 0f;
             var db = normalizedVolume <= 0.0001f ? -80f : Mathf.Log10(normalizedVolume) * 20f;
-            bus.MixerGroup.audioMixer.SetFloat(bus.ExposedVolumeParameter, db);
+            if (bus.MixerGroup.audioMixer.SetFloat(bus.ExposedVolumeParameter, db))
+                mixerControlledBuses.Add(bus.Id.Value);
+            else
+                mixerControlledBuses.Remove(bus.Id.Value);
+        }
+
+        private void ApplyVoiceVolume(ActiveVoice voice)
+        {
+            if (voice.Source == null) return;
+            var gain = GetVolume(voice.Bus);
+            if (mixerControlledBuses.Contains(voice.Bus.Value)
+                && profile.TryGetBus(voice.Bus, out var bus)
+                && voice.Source.outputAudioMixerGroup == bus.MixerGroup)
+            {
+                gain = 1f;
+            }
+            if (mutedBuses.TryGetValue(voice.Bus.Value, out var muted) && muted) gain = 0f;
+            voice.Source.volume = voice.TargetVolume * voice.FadeVolume * gain;
         }
 
         private void Warn(string message)
