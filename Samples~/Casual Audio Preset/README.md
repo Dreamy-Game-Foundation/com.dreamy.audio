@@ -1,8 +1,9 @@
 # Casual Audio Preset
 
-Import this sample, assign `DreamyCasualAudioProfile` to `DreamyAudio.Initialize`, then use the Library window to drop clips into the two supplied libraries.
+Sample của Dreamy Audio. Import từ Window > Package Manager > Dreamy Audio > Samples > Import. Unity chép nội dung vào Assets/Samples/Dreamy Audio/0.1.0/Casual Audio Preset/.
 
-The runtime ID format is `libraryId/key` and generated constants use `Dreamy.Audio.Generated`.
+## Cấu trúc và tích hợp
 
-Default buses: `music`, `sfx`, `ui`, `voice`, `ambient`.
+Giữ nguyên folder, .meta, asmdef và reference prefab khi chuyển vào project. Chỉ giữ một bản script/asmdef và một JSON cho mỗi key Resources/DataConfig. Bootstrap config/save/wallet/audio tại GameInstaller trước khi bật UI, theo [README package](../../README.md). Link tương đối này dùng trong source package; sau import, mở README package từ Package Manager.
 
+Casual Audio Preset cung cấp Profile/Library và nhóm âm thanh. Basic Playback là hướng dẫn setup tối thiểu. Gán clip còn thiếu, thêm Library vào Profile rồi gán Profile cho AudioBootstrap hoặc root tự Initialize. ID phát có dạng libraryId/key. Reference Dreamy.Audio.Runtime; component bootstrap cần Dreamy.Audio.Runtime.Components. Không chạy hai luồng initialize song song.

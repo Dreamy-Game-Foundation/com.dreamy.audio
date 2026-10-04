@@ -1,76 +1,72 @@
 # Dreamy Audio
 
-Dreamy Audio is a Unity 6 audio package built around a simple flow:
+Package thuộc Dreamy Game Studio. Hướng dẫn dưới đây mô tả cấu trúc, cách cài vào project và tích hợp ở root/scene.
 
-`DreamyAudioProfile -> AudioLibrary -> SoundAudioFile / MusicAudioFile`
+## Cài package
 
-It provides visual audio authoring, editor preview, trim/loop/fade playback, AudioSource pooling, mixer-bus volume control, and stable string IDs.
+Dùng Unity 6000.0 trở lên. Sandbox đã tham chiếu package bằng `file:../LocalPackages/com.dreamy.audio`. Project khác dùng Package Manager > + > Install package from disk và chọn package.json, hoặc Git URL của repository nội bộ. Cài cả dependency Dreamy/Git vào manifest của game; version dependency không tự cấu hình registry riêng.
 
-## Setup
+Dependency trực tiếp theo package.json:
 
-1. Create a profile with **Tools/Dreamy/Audio/Create/Profile**.
-2. Create a library with **Tools/Dreamy/Audio/Create/Library**.
-3. Open **Tools/Dreamy/Audio/Audio Library** and select the library.
-4. Add Sound or Music groups, then drag AudioClips or folders into a group.
-5. The new Profile already includes `music`, `sfx`, `ui`, `voice`, and `ambience`; add the library to its **Libraries** list.
-6. Add `AudioBootstrap` to the startup scene and assign the Profile.
-7. Use **EXPORT AUDIO LIBRARY IDS** to create `Assets/DreamyGenerated/Audio/DreamyAudioLibraryIds.cs`.
+- `com.unity.ugui` (2.0.0)
+- `com.unity.modules.audio` (1.0.0)
+- `com.unity.modules.physics` (1.0.0)
+- `com.unity.modules.particlesystem` (1.0.0)
 
-The **Casual Audio Preset** sample provides a ready-to-use Profile, SFX/Music Libraries, groups, and common buses.
+## Cấu trúc và asmdef
 
-## Authoring
+| Assembly | Reference | Phạm vi |
+| --- | --- | --- |
+| `Dreamy.Audio.Editor` | Dreamy.Audio.Runtime, Dreamy.Audio.Runtime.Components | Chỉ Editor |
+| `Dreamy.Audio.Runtime` |  | Runtime |
+| `Dreamy.Audio.Runtime.Components` | Dreamy.Audio.Runtime, Unity.ugui, UnityEngine.PhysicsModule, UnityEngine.ParticleSystemModule | Runtime |
 
-The Audio Library window supports:
+Trong asmdef của game, thêm assembly chứa API trực tiếp sử dụng. Code bootstrap reference thêm Core/DataConfig/Datasave/Economy theo nhu cầu; code async reference UniTask. Code gọi type sample reference assembly sample. Giữ Editor reference trong asmdef Editor-only.
 
-- Drag and drop for AudioClips, folders, and existing audio-file assets.
-- Sound/Music groups, rename/delete, drag reordering, and **Copy ID**.
-- Duplicate-ID warnings before export.
-- Persistent last-selected Library and output folder.
+## Cấu trúc và tạo dữ liệu
 
-Select an audio-file asset to edit its playback:
+Runtime/Catalog và Configuration chứa AudioLibrary, file âm thanh và DreamyAudioProfile; Playback/Pooling/Services xử lý phát, pool và bus. Runtime.Components chứa bootstrap/trigger cho scene. Editor chứa cửa sổ authoring. Luồng dữ liệu: Profile → Libraries → SoundAudioFile/MusicAudioFile → AudioClip.
 
-- Multiple clips with **Random**, **Weighted Random**, or **Sequential** selection.
-- **Never Repeat** for variation.
-- Non-destructive playback range and **Intro Then Loop** points.
-- Preview, pause, restart, fade in/out, random pitch, cooldown, instance limit, spatial settings, and mixer routing.
+1. Tạo Profile tại Tools/Dreamy/Audio/Create/Profile và Library tại Tools/Dreamy/Audio/Create/Library.
+2. Mở Tools/Dreamy/Audio/Audio Library, tạo nhóm Sound/Music, kéo clip hoặc folder vào nhóm.
+3. Thêm Library vào Libraries của Profile; chỉnh bus, clip variation, trim/loop/fade và giới hạn playback.
+4. Dùng EXPORT AUDIO LIBRARY IDS để tạo constant trong Assets/DreamyGenerated/Audio. Kiểm tra ID trùng trước export.
 
-A runtime ID is always `library-id/audio.key`, for example `sfx/ui.click`. IDs may use letters, digits, `_`, `-`, and `.`.
+## Cài audio ở GameInstaller
 
-## Runtime
+Profile là field được gán trong Inspector của root. Nếu root tự initialize, chọn luồng này thay cho một AudioBootstrap khác chạy song song.
 
 ```csharp
 using Dreamy.Audio;
-using Dreamy.Audio.Generated;
+using Dreamy.Core;
 
-var result = DreamyAudio.Play(AudioLibraryIds.Sounds.UiClick);
-DreamyAudio.Play("sfx/ui.click");
-DreamyAudio.Play("sfx/enemy.hit", hitPoint);
-DreamyAudio.PlayAttached(hitAudioFile, enemyTransform);
-
-var music = DreamyAudio.PlayMusic(AudioLibraryIds.Music.Menu, new AudioTransition(0.25f));
-DreamyAudio.Stop(music, new AudioTransition(0.5f));
+DreamyAudio.Initialize(audioProfile);
+ServiceLocator.Register<IAudioService>(DreamyAudio.Service);
 ```
 
-`AudioPlayResult` exposes `Succeeded`, `Status`, and `Message`. Common failures include `MissingProfile`, `MissingKey`, `MissingClip`, `Muted`, `Cooldown`, `InstanceLimit`, and `PoolLimit`.
-
-## Buses
-
-Configure buses on `DreamyAudioProfile`. The casual preset includes `music`, `sfx`, `ui`, `voice`, and `ambience`.
+Reference Dreamy.Core.Runtime nếu dùng ServiceLocator. Với scene đơn giản, thêm AudioBootstrap và gán Profile. Khi teardown root, unregister IAudioService theo lifecycle game.
 
 ```csharp
+DreamyAudio.Play("sfx/ui.click");
+var music = DreamyAudio.PlayMusic("music/menu", new AudioTransition(0.25f));
+DreamyAudio.Stop(music, new AudioTransition(0.5f));
 DreamyAudio.SetVolume(AudioBusId.Music, 0.65f);
 DreamyAudio.SetMuted(AudioBusId.Sfx, true);
-DreamyAudio.StopBus(AudioBusId.Music, new AudioTransition(0.25f));
 ```
 
-Bus volume can persist through PlayerPrefs. Assign an AudioMixerGroup and exposed parameter on a bus when using Unity AudioMixer routing.
+Các ID là ví dụ; phải có file tương ứng trong Library. ID có dạng libraryId/key. AudioPlayResult cho biết Succeeded, Status và Message; kiểm tra khi không phát được. Bus có thể lưu volume qua PlayerPrefs; gán AudioMixerGroup và exposed parameter nếu dùng mixer.
 
-## Generated IDs
+Import Casual Audio Preset, gán clip vào Library và Profile cho bootstrap. Basic Playback hướng dẫn thiết lập tối thiểu. ID export nằm trong assembly của Assets, nên code dùng constant phải reference assembly chứa file được sinh.
 
-Exported constants use the `Dreamy.Audio.Generated` namespace and are written under `Assets`, outside package assemblies. Export is blocked when a Library contains duplicate IDs.
+Khi chuyển từ phiên bản Catalog cũ, đưa Library vào Profile.Libraries. Catalog/EventDefinition/Variant đã bị loại bỏ; asset DreamyAudioCatalog cũ cần được xử lý khi nâng cấp.
+## Import sample
 
-## Migration from Catalog
+Mở Window > Package Manager, chọn Dreamy Audio > Samples > Import. Unity chép vào Assets/Samples/Dreamy Audio/0.1.0/. Chuyển cả folder nếu tùy biến, giữ .meta và reference prefab; không giữ bản script/asmdef hoặc Resources document trùng.
 
-Catalog, EventDefinition, and Variant have been removed. Move each old Library into `DreamyAudioProfile.Libraries` before upgrading. Old `DreamyAudioCatalog` assets become Missing Script after the upgrade.
+- **Casual Audio Preset**: nguồn `Samples~/Casual Audio Preset`.
 
-`AudioKey.catalogId` and `AudioAnimationEventReceiver.defaultCatalogId` are migrated to library IDs through `FormerlySerializedAs` when Unity reloads the asset.
+- **Basic Playback**: nguồn `Samples~/Basic Playback`.
+
+## Asset và Addressables
+
+Profile trong ví dụ được root reference trực tiếp. Không cần đưa nó vào group để phát âm thanh. Nếu game muốn tải Profile bằng Addressables, đưa asset vào group, đặt address ổn định và load bằng loader của game trước DreamyAudio.Initialize. Audio không tự tra string ID âm thanh như một Addressables key; ID library/key thuộc Library.
